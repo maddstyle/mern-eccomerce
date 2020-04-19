@@ -1,14 +1,17 @@
 const Category = require('../models/category')
-const { errorHandler } = require("../helpers/dbErrorHandler");
+const { errorHandler } = require('../helpers/dbErrorHandler')
 
 exports.create = (req, res) => {
-  const category = new Category(req.body);
+  const category = new Category({
+    name: req.body.name,
+  })
   category.save((err, data) => {
-    if(err) {
+    // console.log(err.message)
+    if (err) {
       return res.status(400).json({
-        error: errorHandler(err)
-      });
+        error: errorHandler(err),
+      })
     }
-    res.json({ data });
-  });
-};
+    res.json({ data })
+  })
+}
