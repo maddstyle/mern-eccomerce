@@ -13,9 +13,4 @@ router.post("/signup", userSignupValidator, signup);
 router.post("/signin", signin);
 router.get("/signout", signout);
 
-//TEST ROUTE FOR REQUIRE SIGN IN
-// router.get('/hello', requireSignin, (req, res) => {
-//   res.send('hello there');
-// });
-
 module.exports = router;
