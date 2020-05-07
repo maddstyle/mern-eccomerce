@@ -18,12 +18,14 @@ const app = express();
 
 // db
 mongoose
-  .connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log("DB Connected"));
+  .connect(process.env.MONGODB_URI)
+    .then(x => {
+      console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+    })
+    .catch(err => {
+      console.error('Error connecting to mongo', err)
+    });
+
 
 app.use(
   cors({
@@ -47,8 +49,15 @@ app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 
-const port = process.env.PORT || 8000;
+const port = process.env.REACT_APP_API_URL || 8000;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+app.use((req, res, next) => {
+  // If no routes match, send them the React HTML.
+  res.sendFile(__dirname + "/public/index.html");
+});
+
+// module.exports = app;
