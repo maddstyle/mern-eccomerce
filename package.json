@@ -20,9 +20,13 @@
     "formidable": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.9.11",
+    "mongoose": "^5.9.13",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.3",
     "uuid": "^7.0.3"
+  },
+  "engines": {
+    "node": "13.10.x",
+    "npm": "6.14.x"
   }
 }
