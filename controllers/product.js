@@ -1,7 +1,7 @@
 const formidable = require("formidable");
 const _ = require("lodash");
 const fs = require("fs");
-const Product = require("../models/product");
+const Product = require("../models/Product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.productById = (req, res, next, id) => {
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
     if (err) {
-        console.log(err);
+      console.log(err);
       return res.status(400).json({
         error: "Image could not be uploaded"
       });
@@ -266,40 +266,40 @@ exports.listSearch = (req, res) => {
   const query = {};
   // assign search value to query.name
   if (req.query.search) {
-      query.name = { $regex: req.query.search, $options: "i" };
-      // assigne category value to query.category
-      if (req.query.category && req.query.category != "All") {
-          query.category = req.query.category;
+    query.name = { $regex: req.query.search, $options: "i" };
+    // assigne category value to query.category
+    if (req.query.category && req.query.category != "All") {
+      query.category = req.query.category;
+    }
+    // find the product based on query object with 2 properties
+    // search and category
+    Product.find(query, (err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err)
+        });
       }
-      // find the product based on query object with 2 properties
-      // search and category
-      Product.find(query, (err, products) => {
-          if (err) {
-              return res.status(400).json({
-                  error: errorHandler(err)
-              });
-          }
-          res.json(products);
-      }).select("-photo");
+      res.json(products);
+    }).select("-photo");
   }
 };
 
 exports.decreaseQuantity = (req, res, next) => {
   let bulkOps = req.body.order.products.map(item => {
-      return {
-          updateOne: {
-              filter: { _id: item._id },
-              update: { $inc: { quantity: -item.count, sold: +item.count } }
-          }
-      };
+    return {
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $inc: { quantity: -item.count, sold: +item.count } }
+      }
+    };
   });
 
   Product.bulkWrite(bulkOps, {}, (error, products) => {
-      if (error) {
-          return res.status(400).json({
-              error: "Could not update product"
-          });
-      }
-      next();
+    if (error) {
+      return res.status(400).json({
+        error: "Could not update product"
+      });
+    }
+    next();
   });
 };
