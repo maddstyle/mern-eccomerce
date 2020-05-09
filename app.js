@@ -7,7 +7,6 @@ const cors = require("cors");
 const expressValidator = require("express-validator");
 require("dotenv").config();
 
-
 // import routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
@@ -20,13 +19,14 @@ const app = express();
 // db
 mongoose
   .connect(process.env.MONGODB_URI)
-    .then(x => {
-      console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
-    })
-    .catch(err => {
-      console.error('Error connecting to mongo', err)
-    });
-
+  .then(x => {
+    console.log(
+      `Connected to Mongo! Database name: "${x.connections[0].name}"`
+    );
+  })
+  .catch(err => {
+    console.error("Error connecting to mongo", err);
+  });
 
 app.use(
   cors({
@@ -50,7 +50,7 @@ app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 
-const port = process.env.REACT_APP_API_URL || 8000;
+const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
